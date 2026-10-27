@@ -1,0 +1,5 @@
+FLAG-111068952415 :
+
+Mon site web pour les instructions : https://www.gradenegger.eu/fr/inspecter-le-trafic-de-donnees-https-ssl-avec-wireshark/
+
+J'ai analysé le traffic Wireshark, il avait des paquets contenant [Application Data Protocol: Hypertext Transfer Protocol], J'ai ajoutés une clé d'encryptage selon le site, j'ai mis une des deux adresses ip dans le traffic, port 443, protocol http et j'ai pris le fichier TP1, j'ai filtrés les paquets http et il avait des nouveaux, j'ai trouver le flag dans lui qui disait text.html dans l'information
