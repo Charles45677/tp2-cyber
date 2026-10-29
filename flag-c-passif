@@ -1,0 +1,60 @@
+
+Flag C=FLAG-1576593266
+script pour le flag-c-passif
+public class Prng_breaker {
+
+    private static final long MULT = 0x5DEECE66DL;
+    private static final long ADD = 0xBL;
+    private static final long MASK = (1L << 48) - 1;
+    private static final long INVERSE = 0xDFE05BCB1365L;
+
+    public static void main(String[] args) {
+
+        int[] outputs = {
+            -342157642,
+            -567453395,
+            2095764733,
+            -1847269977,
+            -435473689,
+            69655348,
+            -834264110,
+            494280159,
+            884476751,
+            835838844
+        };
+
+        for (long low = 0; low < 65536; low++) {
+
+            long state =
+                ((outputs[0] & 0xFFFFFFFFL) << 16) | low;
+
+            boolean match = true;
+
+            for (int i = 1; i < outputs.length; i++) {
+
+                state = (state * MULT + ADD) & MASK;
+
+                if ((int) (state >>> 16) != outputs[i]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+
+                long previousState =
+                    (((((long) outputs[0] & 0xFFFFFFFFL) << 16)
+                    | low) - ADD) * INVERSE & MASK;
+
+                long seed = previousState ^ MULT;
+
+                state = (state * MULT + ADD) & MASK;
+
+                int secret = (int) (state >>> 16);
+
+                System.out.println("Seed equivalent: " + seed);
+                System.out.println("Secret code: FLAG-" + secret);
+            }
+        }
+    }
+}
