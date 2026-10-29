@@ -1,0 +1,6 @@
+flag-1^
+
+Premièrement j'ai trouvé le passeword en regardant la trace sur Wireshark 
+et j'ai regarde la trace 78 dans son HTTP FLUX pour trouver le champ password. J'ai convertie
+en decimale puis fait la racine cubine et convertie en binaire. J'ai terminé en convertisant
+en table ASCII pour trouvé les valeurs du flag.
