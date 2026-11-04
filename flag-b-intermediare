@@ -1,0 +1,10 @@
+FLAGI-10411999102
+script: 
+def secret():
+    data = ['H', 'W', 'C', 'F']
+    flag = "FLAGI-"
+    for c in data:
+        flag = flag + str(ord(c.lower()))
+    return flag
+  intermediateFlag = secret()
+print(intermediateFlag)
