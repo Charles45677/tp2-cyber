@@ -1,0 +1,17 @@
+#Pour trouver le flag - il faut run avant scriptC 
+# et le garder pendant que scriptC roule
+from flask import Flask, request
+import ssl
+#https://flask.palletsprojects.com/en/stable/api/#flask.Request.args
+#https://flask.palletsprojects.com/en/stable/api/#flask.Request.full_path
+app = Flask(__name__)
+
+@app.route("/secret")
+def secret():
+    print("flag : ", request.args.get("flag"), flush=True)
+    print("Path : ", request.full_path, flush = True)
+    return "OK\n"
+
+
+if __name__ == "__main__":
+        app.run(host="0.0.0.0", port=5552, ssl_context=('myChain.pem', 'privateKey1.pem'))
