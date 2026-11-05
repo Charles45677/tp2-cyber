@@ -1,0 +1,22 @@
+# Pour confirmer que le client envoyait au ip .222
+from scapy.all import *
+ 
+TARGET = "192.168.1.102"
+ 
+asked = set()
+answered = set()
+ 
+def handle(pkt):
+    if not pkt.haslayer(ARP):
+        return
+    arp = pkt[ARP]
+    if arp.op == 1 and arp.psrc == TARGET:
+        asked.add(arp.pdst)
+    elif arp.op == 2:
+        answered.add(arp.psrc)
+ 
+print("sniff 30s")
+sniff(filter="arp", prn=handle, timeout=30)
+ 
+print("\n.102 ask for :", sorted(asked))
+print("answered :", sorted(answered))
