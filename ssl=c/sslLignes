@@ -1,0 +1,8 @@
+openssl genpkey -algorithm RSA -out privateKey1.pem -pkeyopt rsa_keygen_bits:2048
+
+openssl req -new -sha256 -key privateKey1.pem -out myCertReq.csr
+#common name : www.team1D.sslc.fg.ca
+
+openssl x509 -req -in myCertReq.csr -CA rootcert68.pem -CAkey privkey68.pem -CAcreateserial -out myCert.pem -days 500 -sha256
+
+cat myCert.pem rootcert68.pem > myChain.pem
