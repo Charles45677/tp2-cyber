@@ -1,0 +1,18 @@
+flag : 496234724221093669
+"GET /secret?flag=496234724221093669 HTTP/1.1"
+Étapes :
+
+1- Les étapes du flag intermediaire pour trouver l'image
+2- Dans l'image on pouvait voir par les context que la securité demandait d'un certificat CA et la clé de root en hachage md5
+3- L'indice du sslC mentionnait des fichiers dans le tp1, le tp1 mentionne des fichier sur le gitlab
+4- J'ai regarder les jobs de pipeline du gitlab pour trouver le nom de la vm gitlab avec la clé rsa
+5- J'ai entrer dans la vm gitlab et j'ai run sur le dossier secret la ligne  rootcert* | grep -i c69598e869ad36a4569f0d8ee733d474 pour qu'il me dise lequel des fichier rootcert avait la bonne clé
+6- j'ai comparer le modulus du fichier privkey68.pem pour voir si les Cakey et le Ca suivait le meme numéro 
+7- Pour faire l'attaque j'avais besoin du ScriptC du TP1 mais adapté au valeurs de ce tp alors et avec ce script je pouvais aussi trouver le hostname
+  TARGET_IP = "192.168.1.102" #Adresse du wireshark et enoncer tp2
+  TARGET_MAC = "a6:06:e3:ab:63:a1" # trouvé avec le scrip macScript
+  FAKE_DNS_IP = "192.168.1.222" # confirmé par le script validation-ip-dns
+  MY_MAC = "e6:7b:8d:5a:5f:fb" #trouvé avec le scrip macScript
+8- Avec les clés j'ai run les lignes ssl et j'ai mis dans le common name le hostname
+9-J'ai fait une application flask qui prenait le port cible du client et avec request il va attraper le package get qui contient le flag
+10- avec le scriptC et le flask pret j'ai run en premier flask pour qu'il attrappe les requetes du scriptC et j'ai trouver le flag
